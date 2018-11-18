@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LBT</title>
+    <style>
+        *{
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+        }
+        #wrap{
+            width:1366px;
+            height: 500px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+        #box{
+            width: 9999px;
+            position: relative;
+            overflow: hidden;
+            transition: all 1s;
+            left: 0px;
+
+        }
+        #box li{
+            float: left;
+        }
+        #list{
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            margin-left: -80px;
+        }
+        #list li{
+            width: 35px;
+            height: 5px;
+            border: 1px solid #4b545f;
+            margin-right: 10px;
+            border-radius: 5px;
+            float: left;
+            /*position: absolute;*/
+            z-index: 1000;
+        }
+        .current{
+            background: white;
+        }
+        span{
+            width: 20px;
+            height: 40px;
+            position: absolute;
+            top: 50%;
+            margin-top: -20px;
+            z-index: 2;
+            cursor: pointer;
+        }
+        span img{
+            width: 40px;
+            height: auto;
+        }
+        .left{
+            left: 10px;
+        }
+        .right{
+            right: 20px;
+        }
+
+        /*
+            定位了的标签，有图层顺序，后写的在上面。通过z-index调整图层顺序。默认z-index：0值越大图层越靠上
+
+
+         */
+    </style>
+</head>
+<body>
+<div id="wrap">
+    <span class="left"><img src="images/left.png"></span>
+    <span class="right"><img src="images/right.png"></span>
+    <ul id="box">
+        <li><img src="images/01.jpg" style="height: 500px; width: 1366px;" alt=""></li>
+        <li><img src="images/02.jpg" style="height: 500px; width: 1366px;" alt=""></li>
+        <li><img src="images/03.jpg" style="height: 500px; width: 1366px;" alt=""></li>
+        <li><img src="images/04.jpg" style="height: 500px; width: 1366px;"  alt=""></li>
+        <li><img src="images/05.jpg" style="height: 500px; width: 1366px;" alt=""></li>
+    </ul>
+    <ol id="list">
+        <li  class="current"></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ol>
+
+</div>
+
+<script>
+    var bodyWidth = window.screen.availWidth;
+    console.log(bodyWidth);
+    var obox=document.getElementById('box');
+    var olist=document.getElementById('list');
+    var owrap=document.getElementById('wrap');
+    var spans=document.getElementsByTagName('span');
+
+    //console.log(olist.children[0])
+    // .children选择子代标签，得到的是一个类数组对象。
+    // 图片自动播放
+    var num=0;
+    var timer;
+    function go(){
+        clearInterval(timer)
+        timer=setInterval(function(){
+
+            num++;
+            if(num>4)num=0 ;
+            // if(){
+            // 	只有一句话，大括号可以省略。
+            // }
+            // 单条件判断，如果条件语句只有一句话，大括号可以省略
+            obox.style.left=-bodyWidth*num+'px';
+
+            // 圆圈变色
+            for(var i=0;i<olist.children.length;i++){
+                olist.children[i].removeAttribute('class')
+
+            }
+
+            olist.children[num].setAttribute('class','current')
+
+
+        },5000)
+
+    }
+    // 让图片自动播放
+    go()
+    owrap.onmouseenter=function(){
+        clearInterval(timer)
+    }
+    owrap.onmouseleave=function(){
+        go()
+    }
+
+    // 小圆点增加点击事件
+    for(var i=0;i<olist.children.length;i++){
+        olist.children[i].index=i;
+        olist.children[i].onclick=function(){
+            for(var j=0;j<olist.children.length;j++){
+                olist.children[j].removeAttribute('class')
+
+            }
+            // 把点击和自动播放联系起来
+            num=this.index;
+
+            obox.style.left=-bodyWidth*this.index+'px';
+            this.setAttribute('class','current')
+        }
+
+    }
+
+    // 点击span
+    spans[1].onclick=function(){
+        num++;
+        if(num>4)num=0 ;
+        obox.style.left=-bodyWidth*num+'px';
+
+        // 圆圈变色
+        for(var i=0;i<olist.children.length;i++){
+            olist.children[i].removeAttribute('class')
+
+        }
+
+        olist.children[num].setAttribute('class','current')
+
+    }
+    spans[0].onclick=function(){
+        num--;
+        if(num<0)num=4;
+        obox.style.left=-bodyWidth*num+'px';
+
+        // 圆圈变色
+        for(var i=0;i<olist.children.length;i++){
+            olist.children[i].removeAttribute('class')
+
+        }
+
+        olist.children[num].setAttribute('class','current')
+
+    }
+</script>
+</body>
+</html>
